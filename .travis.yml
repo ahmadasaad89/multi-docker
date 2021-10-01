@@ -15,7 +15,7 @@ after_success:
   - docker build -t ahasaad/multi-worker ./worker
   - docker build -t ahasaad/multi-nginx ./nginx
   # login to docker CLI
-  - echo "$DOCKER_PASSWORD" | docker login -u "DOCKER_ID" --password-stdin
+  - echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_ID" --password-stdin
   # push images to docker hub
   - docker push ahasaad/multi-client
   - docker push ahasaad/multi-server
