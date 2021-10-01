@@ -1,0 +1,23 @@
+language: generic
+sudo: required
+services:
+  - docker
+
+before_install:
+  -docker build -t ahasaad/react-test -f ./client/Dockerfile.dev ./client
+
+script:
+  - docker run -e CI=true ahasaad/react-test npm test
+
+after_success:
+  - docker build -t ahasaad/multi-client ./client
+  - docker build -t ahasaad/multi-server ./server
+  - docker build -t ahasaad/multi-worker ./worker
+  - docker build -t ahasaad/multi-nginx ./nginx
+  # login to docker CLI
+  - echo "$DOCKER_PASSWORD" | docker login -u "DOCKER_ID" --password-stdin
+  # push images to docker hub
+  - docker push ahasaad/multi-client
+  - docker push ahasaad/multi-server
+  - docker push ahasaad/multi-worker
+  - docker push ahasaad/multi-nginx
